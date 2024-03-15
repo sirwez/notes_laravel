@@ -611,7 +611,62 @@ Além disso, o Laravel permite a definição de componentes Blade de uma forma m
   }
   ```
   A ordem dos parâmetros na rota deve ser seguida na função do controlador.
+## Formulários
 
+### Validação de Dados
+
+- **Regras de Validação**: O Laravel oferece uma variedade de regras de validação integradas para validar dados de formulários, como `required`, `min`, `max`, etc.
+
+    ```php
+    $validatedData = $request->validate([
+        'nome' => 'required|max:255',
+        'email' => 'required|email',
+        'senha' => 'required|min:8',
+    ]);
+    ```
+
+- **Exibição de Erros de Validação**: Você pode exibir erros de validação na sua view utilizando a função `@error` ou `@if($errors->has('campo'))`.
+
+    ```php
+    @if($errors->has('nome'))
+        <p>{{ $errors->first('nome') }}</p>
+    @endif
+    ```
+
+### Preenchimento Automático de Campos
+
+- **Mantenha os Valores Anteriores**: O método `old()` do Laravel pode ser usado para manter os valores anteriores nos campos de formulário, útil após uma tentativa de envio mal sucedida.
+
+    ```php
+    <input type="text" name="nome" value="{{ old('nome') }}">
+    ```
+
+### Enviando Formulários
+
+- **Enviar Dados de Formulário**: Ao enviar um formulário, os dados são enviados através de uma requisição HTTP. Você pode acessar esses dados no controlador através do objeto `Request`.
+
+    ```php
+    public function store(Request $request)
+    {
+        $nome = $request->input('nome');
+        // Processamento dos dados do formulário...
+    }
+    ```
+
+- **Redirecionamento Após Envio**: É uma boa prática redirecionar o usuário após o envio bem-sucedido de um formulário.
+
+    ```php
+    return redirect()->route('rota.de.redirecionamento');
+    ```
+
+- **CSRF Protection**: O Laravel protege automaticamente seus formulários contra ataques CSRF (Cross-Site Request Forgery). Você pode incluir o token CSRF utilizando a diretiva `@csrf`.
+
+    ```html
+    <form method="POST" action="/rota">
+        @csrf
+        <!-- Campos do formulário aqui -->
+    </form>
+    ```
 
 ---
 
